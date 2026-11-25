@@ -24,8 +24,6 @@
   --btn-text: #ffffff;
   --nav-bg: rgba(255, 255, 255, .72);
   --menu-bg: rgba(255, 255, 255, .92);
-  --todo-bg: #fff1c2;
-  --todo-text: #7a4b00;   /* 6.6:1 на --todo-bg */
   --hero-from: #000000; --hero-to: #666666;
   /* Градієнт hero: карамель і мед з кучерів на фото, лаванда й небо для холодного балансу */
   --g1: #f3c89b; --g2: #f7b4a7; --g3: #c8b6f2; --g4: #a8d4f4;
@@ -46,8 +44,6 @@
     --btn-text: #000000;
     --nav-bg: rgba(24, 24, 24, .72);
     --menu-bg: rgba(0, 0, 0, .92);
-    --todo-bg: #313131;
-    --todo-text: #ffd66b;  /* 9.4:1 на #313131 */
     --hero-from: #ffffff; --hero-to: #9b9b9b;
     --g1: #8a5a2b; --g2: #7a3a4a; --g3: #4b3a8a; --g4: #1f5a7a;
     --glow-opacity: .7;
@@ -65,8 +61,6 @@
   --btn-text: #000000;
   --nav-bg: rgba(24, 24, 24, .72);
   --menu-bg: rgba(0, 0, 0, .92);
-  --todo-bg: #313131;
-  --todo-text: #ffd66b;
   --hero-from: #ffffff; --hero-to: #9b9b9b;
   --g1: #8a5a2b; --g2: #7a3a4a; --g3: #4b3a8a; --g4: #1f5a7a;
   --glow-opacity: .7;
@@ -131,13 +125,6 @@ img { display: block; max-width: 100%; height: auto; }
   transform: translateY(-200%); transition: transform .3s var(--ease);
 }
 .skip:focus { transform: none; }
-
-/* Мітка «уточнити» для даних, яких поки немає */
-.todo {
-  display: inline-block; vertical-align: middle;
-  padding: var(--s-25) var(--s-75); border-radius: var(--r-full);
-  background: var(--todo-bg); color: var(--todo-text);
-}
 
 /* ---------- Кнопки ---------- */
 .btn {
@@ -296,7 +283,6 @@ body.menu-open { overflow: hidden; }
 .prices li { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-200); padding: var(--s-200) 0; border-top: 1px solid var(--line); }
 .prices li:last-child { border-bottom: 1px solid var(--line); }
 .price { white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
-.note { margin-top: var(--s-200); display: flex; align-items: center; gap: var(--s-75); }
 
 /* Роботи */
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-50); }
