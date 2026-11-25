@@ -30,9 +30,13 @@
   /* Градієнт hero: карамель і мед з кучерів на фото, лаванда й небо для холодного балансу */
   --g1: #f3c89b; --g2: #f7b4a7; --g3: #c8b6f2; --g4: #a8d4f4;
   --glow-opacity: 1;
+  --map-filter: grayscale(1);
+  color-scheme: light;
 }
+/* Темна тема: за налаштуванням системи, якщо людина не обрала світлу вручну,
+   або коли темну обрано кнопкою (data-theme="dark" на <html>) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #000000;
     --surface: #181818;
     --text: #ffffff;
@@ -47,8 +51,30 @@
     --hero-from: #ffffff; --hero-to: #9b9b9b;
     --g1: #8a5a2b; --g2: #7a3a4a; --g3: #4b3a8a; --g4: #1f5a7a;
     --glow-opacity: .7;
+    --map-filter: grayscale(1) invert(.92) hue-rotate(180deg);
+    color-scheme: dark;
   }
 }
+:root[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #181818;
+  --text: #ffffff;
+  --muted: #9b9b9b;
+  --line: #272727;
+  --btn: #ffffff;
+  --btn-text: #000000;
+  --nav-bg: rgba(24, 24, 24, .72);
+  --menu-bg: rgba(0, 0, 0, .92);
+  --todo-bg: #313131;
+  --todo-text: #ffd66b;
+  --hero-from: #ffffff; --hero-to: #9b9b9b;
+  --g1: #8a5a2b; --g2: #7a3a4a; --g3: #4b3a8a; --g4: #1f5a7a;
+  --glow-opacity: .7;
+  --map-filter: grayscale(1) invert(.92) hue-rotate(180deg);
+  color-scheme: dark;
+}
+/* Плавна зміна кольорів при перемиканні теми (тільки колір, без руху) */
+html.theme-anim, html.theme-anim *:not(.icon) { transition: background-color .3s var(--ease, ease-out), color .3s var(--ease, ease-out), border-color .3s var(--ease, ease-out) !important; }
 
 /* ---------- Текстові стилі (за назвами з системи) ---------- */
 .heading-1 { font-size: 60px; line-height: 60px; font-weight: 600; }
@@ -149,11 +175,25 @@ img { display: block; max-width: 100%; height: auto; }
 .nav__links, .nav__cta { display: none; }
 .nav__links a {
   display: inline-flex; align-items: center; min-height: 36px; padding: 0 var(--s-75);
-  border-radius: var(--r-lg); color: var(--muted); text-decoration: none;
+  border-radius: var(--r-lg); color: var(--muted); text-decoration: none; white-space: nowrap;
   transition: color .3s var(--ease), background-color .3s var(--ease);
 }
 .nav__links a:hover, .nav__links a[aria-current="true"] { color: var(--text); }
 .nav__links a[aria-current="true"] { background: var(--surface); }
+
+/* Перемикач теми: місяць у світлій темі, сонце в темній */
+.theme-toggle {
+  display: none; place-items: center; width: 44px; height: 44px; margin: -4px 0; padding: 0; border: 0;
+  border-radius: var(--r-lg); background: transparent; color: var(--text); cursor: pointer;
+  transition: background-color .3s var(--ease);
+}
+.js .theme-toggle { display: grid; }
+.theme-toggle:hover { background: var(--surface); }
+.theme-toggle .icon { grid-area: 1 / 1; transition: opacity .3s var(--ease), transform .5s var(--ease); }
+.theme-toggle .i-sun { opacity: 0; transform: rotate(-90deg) scale(.6); }
+[data-theme="dark"] .theme-toggle .i-sun { opacity: 1; transform: none; }
+[data-theme="dark"] .theme-toggle .i-moon { opacity: 0; transform: rotate(90deg) scale(.6); }
+@media (min-width: 1024px) { .theme-toggle { width: 36px; height: 36px; margin: 0; } }
 
 /* Перемикач меню: дві лінії плавно перетворюються на хрестик */
 .nav__toggle {
@@ -278,8 +318,9 @@ body.menu-open { overflow: hidden; }
 /* Відгуки */
 .reviews { display: grid; gap: var(--s-75); }
 .review { display: grid; gap: var(--s-200); padding: var(--s-300); border-radius: var(--r-xl); border: 1px solid var(--line); }
-.reviews__note { margin-top: var(--s-75); }
-@media (min-width: 1024px) { .reviews { grid-template-columns: 1fr 1fr; gap: var(--s-100); } .reviews__note { grid-column: 1 / -1; } }
+.review blockquote { quotes: none; }
+.reviews__more { margin-top: var(--s-75); justify-self: start; }
+@media (min-width: 1024px) { .reviews { grid-template-columns: 1fr 1fr; gap: var(--s-100); } .reviews__more { grid-column: 1 / -1; } }
 
 /* Питання */
 .faq details { border-top: 1px solid var(--line); }
@@ -301,8 +342,7 @@ body.menu-open { overflow: hidden; }
 .info dd a { display: inline-flex; align-items: center; min-height: 44px; }
 .contacts .btn { width: 100%; margin-top: var(--s-300); }
 .map { margin-top: var(--s-300); aspect-ratio: 4 / 3; border-radius: var(--r-2xl); overflow: hidden; background: var(--surface); }
-.map iframe { display: block; width: 100%; height: 100%; border: 0; filter: grayscale(1); }
-@media (prefers-color-scheme: dark) { .map iframe { filter: grayscale(1) invert(.92) hue-rotate(180deg); } }
+.map iframe { display: block; width: 100%; height: 100%; border: 0; filter: var(--map-filter); }
 @media (min-width: 1024px) {
   .contacts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-500); align-items: start; }
   .info dd { white-space: nowrap; }
@@ -344,4 +384,5 @@ body.menu-open { overflow: hidden; }
   .menu nav > a { transform: none; }
   .btn, .btn:hover, .btn:active, .link .icon, .link:hover .icon { transform: none; }
   .sticky-cta { transform: none; }
+  .theme-toggle .icon, [data-theme="dark"] .theme-toggle .icon { transform: none; }
 }

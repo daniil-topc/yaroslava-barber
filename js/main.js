@@ -3,6 +3,36 @@
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ---------- Перемикач теми ---------- */
+const root = document.documentElement;
+const themeBtn = document.querySelector('.theme-toggle');
+const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+function savedTheme() {
+  try { return localStorage.getItem('theme'); } catch (e) { return null; }
+}
+function applyTheme(theme, animate) {
+  if (animate && !reduceMotion) {
+    root.classList.add('theme-anim');
+    setTimeout(() => root.classList.remove('theme-anim'), 400);
+  }
+  root.setAttribute('data-theme', theme);
+  themeBtn.setAttribute('aria-label', theme === 'dark' ? 'Увімкнути світлу тему' : 'Увімкнути темну тему');
+  // Колір панелі браузера на телефоні
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', theme === 'dark' ? '#000000' : '#ffffff'));
+}
+applyTheme(root.getAttribute('data-theme'), false);
+
+themeBtn.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyTheme(next, true);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+});
+// Поки людина сама не обрала тему, сайт іде за системою
+systemDark.addEventListener('change', (e) => {
+  if (!savedTheme()) applyTheme(e.matches ? 'dark' : 'light', true);
+});
+
 /* ---------- Мобільне меню ---------- */
 const toggle = document.querySelector('.nav__toggle');
 const menu = document.getElementById('menu');
